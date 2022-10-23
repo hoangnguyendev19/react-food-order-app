@@ -32,6 +32,7 @@ const Header = () => {
   const menuRef = useRef(null);
   const headerRef = useRef(null);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
+
   const dispatch = useDispatch();
 
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
@@ -40,48 +41,40 @@ const Header = () => {
     dispatch(cartUiActions.toggle());
   };
 
-  useEffect(() => {
-    window.addEventListener("scroll", () => {
-      if (
-        document.body.scrollTop > 80 ||
-        document.documentElement.scrollTop > 80
-      ) {
-        headerRef.current.classList.add("header__shrink");
-      } else {
-        headerRef.current.classList.remove("header__shrink");
-      }
-    });
-
-    return () => window.removeEventListener("scroll");
-  }, []);
-
   return (
     <header className="header" ref={headerRef}>
       <Container>
         <div className="nav__wrapper d-flex align-items-center justify-content-between">
           <div className="logo">
-            <img src={logo} alt="logo" />
-            <h5>Tasty Treat</h5>
+            <Link to="/home">
+              <img src={logo} alt="logo" />
+              <h5>Hoang's Food</h5>
+            </Link>
           </div>
 
-          {/* ======= menu ======= */}
-          <div className="navigation" ref={menuRef} onClick={toggleMenu}>
-            <div className="menu d-flex align-items-center gap-5">
+          <div className="navigation" ref={menuRef}>
+            <ul className="menu">
+              <li>
+                <span className="show__close" onClick={toggleMenu}>
+                  <i class="ri-close-line"></i>
+                </span>
+              </li>
               {nav__links.map((item, index) => (
-                <NavLink
-                  to={item.path}
-                  key={index}
-                  className={(navClass) =>
-                    navClass.isActive ? "active__menu" : ""
-                  }
-                >
-                  {item.display}
-                </NavLink>
+                <li key={index}>
+                  <NavLink
+                    to={item.path}
+                    className={(navClass) =>
+                      navClass.isActive ? "active__menu" : ""
+                    }
+                    onClick={toggleMenu}
+                  >
+                    {item.display}
+                  </NavLink>
+                </li>
               ))}
-            </div>
+            </ul>
           </div>
 
-          {/* ======== nav right icons ========= */}
           <div className="nav__right d-flex align-items-center gap-4">
             <span className="cart__icon" onClick={toggleCart}>
               <i class="ri-shopping-basket-line"></i>

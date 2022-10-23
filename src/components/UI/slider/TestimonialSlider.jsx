@@ -27,7 +27,7 @@ const TestimonialSlider = () => {
           aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
           quis dolorem quas!"
         </p>
-        <div className=" slider__content d-flex align-items-center gap-3 ">
+        <div className="slider__content d-flex align-items-center gap-3">
           <img src={ava01} alt="avatar" className=" rounded" />
           <h6>Jhon Doe</h6>
         </div>
@@ -39,7 +39,7 @@ const TestimonialSlider = () => {
           aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
           quis dolorem quas!"
         </p>
-        <div className="slider__content d-flex align-items-center gap-3 ">
+        <div className="slider__content d-flex align-items-center gap-3">
           <img src={ava02} alt="avatar" className=" rounded" />
           <h6>Mitchell Marsh</h6>
         </div>
@@ -51,7 +51,7 @@ const TestimonialSlider = () => {
           aliquid odit. Odit dolore ipsum quod debitis nostrum necessitatibus
           quis dolorem quas!"
         </p>
-        <div className="slider__content d-flex align-items-center gap-3 ">
+        <div className="slider__content d-flex align-items-center gap-3">
           <img src={ava03} alt="avatar" className=" rounded" />
           <h6>Steven Crock</h6>
         </div>

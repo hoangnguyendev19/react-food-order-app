@@ -11,7 +11,13 @@ th {
 }
 
 .cart__item-del i {
+  font-size: 1.2rem;
+  transition: all 0.2s linear;
   cursor: pointer;
+}
+
+.cart__item-del i:hover {
+  color: #df2020;
 }
 
 .cart__page-btn button a:hover {

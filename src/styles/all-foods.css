@@ -6,6 +6,7 @@
   cursor: pointer;
 }
 .search__widget input {
+  width: 100%;
   border: none;
 }
 

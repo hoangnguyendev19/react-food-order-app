@@ -26,3 +26,9 @@
     font-size: 0.8rem;
   }
 }
+
+@media only screen and (max-width: 576px) {
+  .slick-slider {
+    width: 350px !important;
+  }
+}

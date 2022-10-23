@@ -33,6 +33,12 @@
 .delete__btn {
   font-size: 1.1rem;
   font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s linear;
+}
+
+.delete__btn:hover {
+  color: #df2020;
 }
 
 .cart__item {
