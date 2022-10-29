@@ -1,11 +1,11 @@
-import React, { useRef, useEffect } from "react";
+import React, { useRef } from "react";
 
 import { Container } from "reactstrap";
 import logo from "../../assets/images/res-logo.png";
 import { NavLink, Link } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 
-import { cartUiActions } from "../../store/shopping-cart/cartUiSlice";
+import { toggle } from "../../store/shopping-cart/cartUiSlice";
 
 import "../../styles/header.css";
 
@@ -38,7 +38,7 @@ const Header = () => {
   const toggleMenu = () => menuRef.current.classList.toggle("show__menu");
 
   const toggleCart = () => {
-    dispatch(cartUiActions.toggle());
+    dispatch(toggle());
   };
 
   return (

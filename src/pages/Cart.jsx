@@ -5,7 +5,7 @@ import Helmet from "../components/Helmet/Helmet";
 import "../styles/cart-page.css";
 import { useSelector, useDispatch } from "react-redux";
 import { Container, Row, Col } from "reactstrap";
-import { cartActions } from "../store/shopping-cart/cartSlice";
+import { deleteItem } from "../store/shopping-cart/cartSlice";
 import { Link } from "react-router-dom";
 
 const Cart = () => {
@@ -68,8 +68,8 @@ const Tr = (props) => {
   const { id, image01, title, price, quantity } = props.item;
   const dispatch = useDispatch();
 
-  const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+  const delItem = () => {
+    dispatch(deleteItem(id));
   };
   return (
     <tr>
@@ -80,7 +80,7 @@ const Tr = (props) => {
       <td className="text-center align-middle">${price}</td>
       <td className="text-center align-middle">{quantity}px</td>
       <td className="text-center cart__item-del align-middle">
-        <i class="ri-delete-bin-line" onClick={deleteItem}></i>
+        <i class="ri-delete-bin-line" onClick={delItem}></i>
       </td>
     </tr>
   );

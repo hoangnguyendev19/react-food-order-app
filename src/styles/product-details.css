@@ -50,11 +50,35 @@
 }
 
 .form {
-  width: 60%;
+  width: 100%;
   margin: auto;
   background: #fde4e4;
   padding: 20px;
   border-radius: 5px;
+}
+
+.review {
+  padding: 20px 0;
+  border-bottom: 1px solid #ccc;
+  margin-bottom: 30px;
+}
+
+.review .user__email {
+  font-style: italic;
+  font-weight: 600;
+  color: #212245;
+}
+
+.review .user__email {
+  font-size: 0.8rem;
+}
+
+.no-review {
+  text-align: center;
+  margin: 150px 0;
+  font-weight: bold;
+  font-size: 2rem;
+  color: #212245;
 }
 
 .form__group {
@@ -63,7 +87,6 @@
 .form__group input,
 .form__group textarea {
   width: 100%;
-  background: transparent;
   padding: 7px 20px;
   border: none;
   border-bottom: 1px solid #2122454c;
@@ -74,13 +97,12 @@
   outline: none;
 }
 
-.user__name {
-  font-weight: 600;
-  color: #212245;
-}
-
-.user__email {
+.form__group p {
+  text-align: left;
+  color: #df2020;
   font-size: 0.8rem;
+  margin-top: 10px;
+  padding-left: 20px;
 }
 
 .feedback__text {
@@ -90,7 +112,7 @@
 .img__item {
   cursor: pointer;
 }
-.related__Product-title {
+.related__product-title {
   font-size: 1.4rem;
 }
 

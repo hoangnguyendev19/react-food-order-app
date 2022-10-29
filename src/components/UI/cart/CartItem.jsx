@@ -4,7 +4,11 @@ import { ListGroupItem } from "reactstrap";
 import "../../../styles/cart-item.css";
 
 import { useDispatch } from "react-redux";
-import { cartActions } from "../../../store/shopping-cart/cartSlice";
+import {
+  addItem,
+  removeItem,
+  deleteItem,
+} from "../../../store/shopping-cart/cartSlice";
 
 const CartItem = ({ item }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
@@ -13,7 +17,7 @@ const CartItem = ({ item }) => {
 
   const incrementItem = () => {
     dispatch(
-      cartActions.addItem({
+      addItem({
         id,
         title,
         price,
@@ -23,11 +27,11 @@ const CartItem = ({ item }) => {
   };
 
   const decreaseItem = () => {
-    dispatch(cartActions.removeItem(id));
+    dispatch(removeItem(id));
   };
 
-  const deleteItem = () => {
-    dispatch(cartActions.deleteItem(id));
+  const delItem = () => {
+    dispatch(deleteItem(id));
   };
 
   return (
@@ -52,7 +56,7 @@ const CartItem = ({ item }) => {
             </div>
           </div>
 
-          <span className="delete__btn" onClick={deleteItem}>
+          <span className="delete__btn" onClick={delItem}>
             <i class="ri-close-line"></i>
           </span>
         </div>

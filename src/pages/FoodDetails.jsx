@@ -6,20 +6,21 @@ import Helmet from "../components/Helmet/Helmet";
 import CommonSection from "../components/UI/common-section/CommonSection";
 import { Container, Row, Col } from "reactstrap";
 
-import { useDispatch } from "react-redux";
-import { cartActions } from "../store/shopping-cart/cartSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { addItem } from "../store/shopping-cart/cartSlice";
 
 import "../styles/product-details.css";
 
 import ProductCard from "../components/UI/product-card/ProductCard";
+import { useFormik } from "formik";
+import * as yup from "yup";
+import { post } from "../store/review-comments/commentSlice";
 
 const FoodDetails = () => {
   const [tab, setTab] = useState("desc");
-  const [enteredName, setEnteredName] = useState("");
-  const [enteredEmail, setEnteredEmail] = useState("");
-  const [reviewMsg, setReviewMsg] = useState("");
   const { id } = useParams();
   const dispatch = useDispatch();
+  const commentList = useSelector((state) => state.comment.commentList);
 
   const product = products.find((product) => product.id === id);
   const [previewImg, setPreviewImg] = useState(product.image01);
@@ -27,9 +28,9 @@ const FoodDetails = () => {
 
   const relatedProduct = products.filter((item) => category === item.category);
 
-  const addItem = () => {
+  const increaseItem = () => {
     dispatch(
-      cartActions.addItem({
+      addItem({
         id,
         title,
         price,
@@ -38,11 +39,37 @@ const FoodDetails = () => {
     );
   };
 
-  const submitHandler = (e) => {
-    e.preventDefault();
+  const schema = yup.object().shape({
+    fullName: yup
+      .string()
+      .required("Please enter your full name!")
+      .min(4, "Please enter your full name at least four characters!")
+      .max(30, "Too long!"),
+    email: yup
+      .string()
+      .required("Please enter your email!")
+      .matches(
+        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
+        "Please enter your email a valid!"
+      ),
+    reviewText: yup
+      .string()
+      .required("Please write your reviews!")
+      .min(10, "Please write your reviews at least ten characters!"),
+  });
 
-    console.log(enteredName, enteredEmail, reviewMsg);
-  };
+  const formik = useFormik({
+    initialValues: {
+      fullName: "",
+      email: "",
+      reviewText: "",
+    },
+    validationSchema: schema,
+    onSubmit: (values, { resetForm }) => {
+      dispatch(post(values));
+      resetForm();
+    },
+  });
 
   useEffect(() => {
     setPreviewImg(product.image01);
@@ -94,14 +121,12 @@ const FoodDetails = () => {
                 <div className="single__product-content">
                   <h2 className="product__title mb-3">{title}</h2>
                   <p className="product__price">
-                    {" "}
                     Price: <span>${price}</span>
                   </p>
                   <p className="category mb-5">
                     Category: <span>{category}</span>
                   </p>
-
-                  <button onClick={addItem} className="addTOCart__btn">
+                  <button onClick={increaseItem} className="addTOCart__btn">
                     Add to Cart
                   </button>
                 </div>
@@ -129,40 +154,42 @@ const FoodDetails = () => {
                   </div>
                 ) : (
                   <div className="tab__form mb-3">
-                    <div className="review pt-5">
-                      <p className="user__name mb-0">Jhon Doe</p>
-                      <p className="user__email">jhon1@gmail.com</p>
-                      <p className="feedback__text">great product</p>
-                    </div>
+                    {commentList.length > 0 ? (
+                      commentList.map((comment, idx) => (
+                        <div className="review" key={idx}>
+                          <p className="user__name mb-0">{comment.fullName}</p>
+                          <p className="user__email">{comment.email}</p>
+                          <p className="feedback__text">{comment.reviewText}</p>
+                        </div>
+                      ))
+                    ) : (
+                      <p className="no-review">No anyone review.</p>
+                    )}
 
-                    <div className="review">
-                      <p className="user__name mb-0">Jhon Doe</p>
-                      <p className="user__email">jhon1@gmail.com</p>
-                      <p className="feedback__text">great product</p>
-                    </div>
-
-                    <div className="review">
-                      <p className="user__name mb-0">Jhon Doe</p>
-                      <p className="user__email">jhon1@gmail.com</p>
-                      <p className="feedback__text">great product</p>
-                    </div>
-                    <form className="form" onSubmit={submitHandler}>
+                    <form className="form" onSubmit={formik.handleSubmit}>
                       <div className="form__group">
                         <input
                           type="text"
-                          placeholder="Enter your name"
-                          onChange={(e) => setEnteredName(e.target.value)}
-                          required
+                          placeholder="Full Name"
+                          id="fullName"
+                          name="fullName"
+                          value={formik.values.fullName}
+                          onChange={formik.handleChange}
                         />
+                        {formik.errors.fullName && (
+                          <p>{formik.errors.fullName}</p>
+                        )}
                       </div>
-
                       <div className="form__group">
                         <input
-                          type="text"
-                          placeholder="Enter your email"
-                          onChange={(e) => setEnteredEmail(e.target.value)}
-                          required
+                          type="email"
+                          placeholder="Email"
+                          id="email"
+                          name="email"
+                          value={formik.values.email}
+                          onChange={formik.handleChange}
                         />
+                        {formik.errors.email && <p>{formik.errors.email}</p>}
                       </div>
 
                       <div className="form__group">
@@ -170,9 +197,14 @@ const FoodDetails = () => {
                           rows={5}
                           type="text"
                           placeholder="Write your review"
-                          onChange={(e) => setReviewMsg(e.target.value)}
-                          required
+                          id="reviewText"
+                          name="reviewText"
+                          value={formik.values.reviewText}
+                          onChange={formik.handleChange}
                         />
+                        {formik.errors.reviewText && (
+                          <p>{formik.errors.reviewText}</p>
+                        )}
                       </div>
 
                       <button type="submit" className="addTOCart__btn">
@@ -184,7 +216,7 @@ const FoodDetails = () => {
               </Col>
 
               <Col lg="12" className="mb-5 mt-4">
-                <h2 className="related__Product-title">You might also like</h2>
+                <h2 className="related__product-title">You might also like</h2>
               </Col>
 
               {relatedProduct.map((item) => (

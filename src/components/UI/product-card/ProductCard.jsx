@@ -5,7 +5,7 @@ import "../../../styles/product-card.css";
 import { Link } from "react-router-dom";
 
 import { useDispatch } from "react-redux";
-import { cartActions } from "../../../store/shopping-cart/cartSlice";
+import { addItem } from "../../../store/shopping-cart/cartSlice";
 
 const ProductCard = (props) => {
   const { id, title, image01, price, sale, salePercent } = props.item;
@@ -13,7 +13,7 @@ const ProductCard = (props) => {
 
   const addToCart = () => {
     dispatch(
-      cartActions.addItem({
+      addItem({
         id,
         title,
         image01,

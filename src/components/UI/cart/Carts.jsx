@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import CartItem from "./CartItem";
 
 import { useDispatch, useSelector } from "react-redux";
-import { cartUiActions } from "../../../store/shopping-cart/cartUiSlice";
+import { toggle } from "../../../store/shopping-cart/cartUiSlice";
 
 import "../../../styles/shopping-cart.css";
 
@@ -15,7 +15,7 @@ const Carts = () => {
   const totalAmount = useSelector((state) => state.cart.totalAmount);
 
   const toggleCart = () => {
-    dispatch(cartUiActions.toggle());
+    dispatch(toggle());
   };
   return (
     <div className="cart__container">
