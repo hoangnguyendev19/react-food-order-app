@@ -1,48 +1,61 @@
-import React from "react";
-import Helmet from "../components/Helmet/Helmet";
-import CommonSection from "../components/UI/common-section/CommonSection";
-import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import React from 'react';
+import Helmet from '../components/Helmet/Helmet';
+import CommonSection from '../components/UI/common-section/CommonSection';
+import { Container, Row, Col } from 'reactstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/firebase-config';
+import { useDispatch } from 'react-redux';
+import { updateNotifyStatus } from '../store/auth/authSlice';
 
 const Register = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const schema = yup.object().shape({
     fullName: yup
       .string()
-      .required("Please enter your full name!")
-      .min(4, "Please enter your full name at least four characters!")
-      .max(30, "Too long!"),
+      .required('Please enter your full name!')
+      .min(4, 'Please enter your full name at least four characters!')
+      .max(30, 'Too long!'),
     email: yup
       .string()
-      .required("Please enter your email!")
-      .matches(
-        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        "Please enter your email a valid!"
-      ),
+      .required('Please enter your email!')
+      .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter your email a valid!'),
     password: yup
       .string()
-      .required("Please enter your password!")
+      .required('Please enter your password!')
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Please enter your password at least eight characters includes one letter, one number and one special character!"
+        'Please enter your password at least eight characters includes one letter, one number and one special character!'
       ),
     confirmedPassword: yup
       .string()
-      .required("Please retype your password!")
-      .oneOf([yup.ref("password"), null], "Passwords must match!"),
+      .required('Please retype your password!')
+      .oneOf([yup.ref('password'), null], 'Passwords must match!'),
   });
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      email: "",
-      password: "",
-      confirmedPassword: "",
+      fullName: '',
+      email: '',
+      password: '',
+      confirmedPassword: '',
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-      alert("You sign up success!");
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const user = await createUserWithEmailAndPassword(auth, values.email, values.password);
+        console.log(user);
+        dispatch(updateNotifyStatus('succeed'));
+        navigate('/login');
+      } catch (error) {
+        resetForm();
+        dispatch(updateNotifyStatus('failure'));
+      }
     },
   });
 
@@ -98,9 +111,7 @@ const Register = () => {
                       value={formik.values.confirmedPassword}
                       onChange={formik.handleChange}
                     />
-                    {formik.errors.confirmedPassword && (
-                      <p>{formik.errors.confirmedPassword}</p>
-                    )}
+                    {formik.errors.confirmedPassword && <p>{formik.errors.confirmedPassword}</p>}
                   </div>
                   <button type="submit" className="addTOCart__btn">
                     Sign Up

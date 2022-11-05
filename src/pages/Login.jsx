@@ -1,37 +1,50 @@
-import React from "react";
-import Helmet from "../components/Helmet/Helmet";
-import CommonSection from "../components/UI/common-section/CommonSection";
-import { Container, Row, Col } from "reactstrap";
-import { Link } from "react-router-dom";
-import { useFormik } from "formik";
-import * as yup from "yup";
+import React from 'react';
+import Helmet from '../components/Helmet/Helmet';
+import CommonSection from '../components/UI/common-section/CommonSection';
+import { Container, Row, Col } from 'reactstrap';
+import { Link, useNavigate } from 'react-router-dom';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+
+import { signInWithEmailAndPassword } from 'firebase/auth';
+import { auth } from '../firebase/firebase-config';
+import { useDispatch } from 'react-redux';
+import { updateNotifyStatus, updateSignInStatus } from '../store/auth/authSlice';
 
 const Login = () => {
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const schema = yup.object().shape({
     email: yup
       .string()
-      .required("Please enter your email!")
-      .matches(
-        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        "Please enter your email a valid!"
-      ),
+      .required('Please enter your email!')
+      .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter your email a valid!'),
     password: yup
       .string()
-      .required("Please enter your password!")
+      .required('Please enter your password!')
       .matches(
         /^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{8,}$/,
-        "Please enter your password at least eight characters includes one letter, one number and one special character!"
+        'Please enter your password at least eight characters includes one letter, one number and one special character!'
       ),
   });
 
   const formik = useFormik({
     initialValues: {
-      email: "",
-      password: "",
+      email: '',
+      password: '',
     },
     validationSchema: schema,
-    onSubmit: (values) => {
-      alert("You login success!");
+    onSubmit: async (values, { resetForm }) => {
+      try {
+        const user = await signInWithEmailAndPassword(auth, values.email, values.password);
+        console.log(user);
+        navigate('/home');
+        dispatch(updateSignInStatus(true));
+      } catch (error) {
+        resetForm();
+        dispatch(updateNotifyStatus('failure'));
+      }
     },
   });
 
@@ -71,9 +84,7 @@ const Login = () => {
                     Login
                   </button>
                 </form>
-                <Link to="/register">
-                  Don't have an account? Create an account
-                </Link>
+                <Link to="/register">Don't have an account? Create an account</Link>
               </Col>
             </Row>
           </Container>
