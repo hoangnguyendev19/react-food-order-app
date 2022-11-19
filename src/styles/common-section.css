@@ -7,34 +7,3 @@
   padding: 80px 0px;
   position: relative;
 }
-
-.notify {
-  position: absolute;
-  top: 30px;
-  right: 20px;
-  width: 300px;
-  background-color: #4cca12;
-  border-radius: 5px;
-  padding: 10px 15px;
-  font-size: 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  color: white;
-  z-index: 999;
-  transition: all 0.3s linear;
-}
-
-.notify span {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.notify i {
-  font-size: 1.6rem;
-}
-
-.notify.notify-failure {
-  background-color: rgb(245, 97, 97);
-}

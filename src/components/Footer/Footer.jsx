@@ -1,10 +1,7 @@
-import React from "react";
-import { Container, Row, Col, ListGroup, ListGroupItem } from "reactstrap";
-import logo from "../../assets/images/res-logo.png";
-
-import "../../styles/footer.css";
-
-import { Link } from "react-router-dom";
+import React from 'react';
+import { Container, Row, Col, ListGroup, ListGroupItem } from 'reactstrap';
+import logo from '../../assets/images/res-logo.png';
+import '../../styles/footer.css';
 
 const Footer = () => {
   return (
@@ -16,8 +13,7 @@ const Footer = () => {
               <img src={logo} alt="logo" />
               <h5>Hoang's Food</h5>
               <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                Nesciunt pariatur accusamus
+                Lorem ipsum dolor sit amet consectetur adipisicing elit. Nesciunt pariatur accusamus
               </p>
             </div>
           </Col>
@@ -60,7 +56,7 @@ const Footer = () => {
               <div className="d-flex justify-content-start align-items-center">
                 <input type="email" placeholder="Enter your email" />
                 <span>
-                  <i class="ri-send-plane-line"></i>
+                  <i className="ri-send-plane-line"></i>
                 </span>
               </div>
             </div>
@@ -70,8 +66,7 @@ const Footer = () => {
         <Row className="mt-5">
           <Col lg="6" md="6" sm="12" xs="12">
             <p className="copyright__text">
-              Copyright - 2022, website made by Hoang Nguyen. All Rights
-              Reserved.
+              Copyright - 2022, website made by Hoang Nguyen. All Rights Reserved.
             </p>
           </Col>
           <Col lg="6" md="6" sm="12" xs="12">
@@ -79,25 +74,25 @@ const Footer = () => {
               <p className="m-0">Follow: </p>
               <span>
                 <a href="https://www.facebook.com/profile.php?id=100072864520681">
-                  <i class="ri-facebook-line"></i>
+                  <i className="ri-facebook-line"></i>
                 </a>
               </span>
 
               <span>
                 <a href="https://github.com/hoangnguyendev19">
-                  <i class="ri-github-line"></i>
+                  <i className="ri-github-line"></i>
                 </a>
               </span>
 
               <span>
                 <a href="https://www.youtube.com/channel/UCX6FHphep04D0mYnuFkSTjg">
-                  <i class="ri-youtube-line"></i>
+                  <i className="ri-youtube-line"></i>
                 </a>
               </span>
 
               <span>
                 <a href="https://www.linkedin.com/in/hoang-nguyen-0a8921242/">
-                  <i class="ri-linkedin-line"></i>
+                  <i className="ri-linkedin-line"></i>
                 </a>
               </span>
             </div>

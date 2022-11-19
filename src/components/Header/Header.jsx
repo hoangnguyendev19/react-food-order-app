@@ -2,15 +2,15 @@ import React, { useRef, useState } from 'react';
 
 import { Container, Dropdown, DropdownItem, DropdownMenu, DropdownToggle } from 'reactstrap';
 import logo from '../../assets/images/res-logo.png';
-import { NavLink, Link } from 'react-router-dom';
+import { NavLink, Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { toggle } from '../../store/shopping-cart/cartUiSlice';
 
 import '../../styles/header.css';
-import { signOut } from 'firebase/auth';
+import { onAuthStateChanged, signOut } from 'firebase/auth';
 import { auth } from '../../firebase/firebase-config';
-import { updateSignInStatus } from '../../store/auth/authSlice';
+import { resetCart } from '../../store/shopping-cart/cartSlice';
 
 const nav__links = [
   {
@@ -36,19 +36,41 @@ const Header = () => {
   const headerRef = useRef(null);
   const totalQuantity = useSelector((state) => state.cart.totalQuantity);
   const [dropdownOpen, setDropdownOpen] = useState(false);
-  const signInStatus = useSelector((state) => state.auth.signInStatus);
-
+  const [signedIn, isSignedIn] = useState(false);
+  const [imageUrl, setImageUrl] = useState(
+    'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'
+  );
+  const navigate = useNavigate();
   const dispatch = useDispatch();
 
   const toggleMenu = () => menuRef.current.classList.toggle('show__menu');
 
   const toggleCart = () => {
-    dispatch(toggle());
+    if (signedIn) {
+      dispatch(toggle());
+    } else {
+      navigate('/login');
+    }
   };
+
+  onAuthStateChanged(auth, (user) => {
+    if (user) {
+      isSignedIn(true);
+      setImageUrl(
+        user.photoURL
+          ? user.photoURL
+          : 'https://www.kindpng.com/picc/m/24-248253_user-profile-default-image-png-clipart-png-download.png'
+      );
+    } else {
+      isSignedIn(false);
+    }
+  });
 
   const logout = async () => {
     await signOut(auth);
-    dispatch(updateSignInStatus(false));
+    dispatch(resetCart());
+    navigate('/login');
+    window.location.reload();
   };
 
   return (
@@ -66,7 +88,7 @@ const Header = () => {
             <ul className="menu">
               <li>
                 <span className="show__close" onClick={toggleMenu}>
-                  <i class="ri-close-line"></i>
+                  <i className="ri-close-line"></i>
                 </span>
               </li>
               {nav__links.map((item, index) => (
@@ -83,21 +105,21 @@ const Header = () => {
             </ul>
           </div>
 
-          <div className="nav__right d-flex align-items-center gap-4">
+          <div className="nav__right d-flex align-items-center">
             <span className="cart__icon" onClick={toggleCart}>
-              <i class="ri-shopping-basket-line"></i>
+              <i className="ri-shopping-basket-line"></i>
               <span className="cart__badge">{totalQuantity}</span>
             </span>
 
             <div className="user">
-              {signInStatus ? (
+              {signedIn ? (
                 <Dropdown isOpen={dropdownOpen} toggle={() => setDropdownOpen(!dropdownOpen)}>
-                  <DropdownToggle caret tag="span">
-                    <i class="ri-user-line"></i>
+                  <DropdownToggle caret tag="div">
+                    <img src={imageUrl} alt="avatar" />
                   </DropdownToggle>
                   <DropdownMenu>
                     <DropdownItem>
-                      <Link to="/home">Your profile</Link>
+                      <Link to="/profile">Your profile</Link>
                     </DropdownItem>
                     <DropdownItem>
                       <Link to="/cart">Your cart</Link>
@@ -111,14 +133,14 @@ const Header = () => {
                     <Link to="/login">Sign In</Link>
                   </div>
                   <div className="user__sign-up">
-                    <Link to="/register">Sign Out</Link>
+                    <Link to="/register">Sign Up</Link>
                   </div>
                 </>
               )}
             </div>
 
             <span className="mobile__menu" onClick={toggleMenu}>
-              <i class="ri-menu-line"></i>
+              <i className="ri-menu-line"></i>
             </span>
           </div>
         </div>

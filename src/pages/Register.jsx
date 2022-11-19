@@ -8,19 +8,15 @@ import * as yup from 'yup';
 
 import { createUserWithEmailAndPassword } from 'firebase/auth';
 import { auth } from '../firebase/firebase-config';
-import { useDispatch } from 'react-redux';
-import { updateNotifyStatus } from '../store/auth/authSlice';
+import NotifyMessage from '../components/UI/notify-message/NotifyMessage';
+import { useState } from 'react';
+import { useEffect } from 'react';
 
 const Register = () => {
   const navigate = useNavigate();
-  const dispatch = useDispatch();
+  const [showNotify, isShowNotify] = useState(false);
 
   const schema = yup.object().shape({
-    fullName: yup
-      .string()
-      .required('Please enter your full name!')
-      .min(4, 'Please enter your full name at least four characters!')
-      .max(30, 'Too long!'),
     email: yup
       .string()
       .required('Please enter your email!')
@@ -40,7 +36,6 @@ const Register = () => {
 
   const formik = useFormik({
     initialValues: {
-      fullName: '',
       email: '',
       password: '',
       confirmedPassword: '',
@@ -48,82 +43,81 @@ const Register = () => {
     validationSchema: schema,
     onSubmit: async (values, { resetForm }) => {
       try {
-        const user = await createUserWithEmailAndPassword(auth, values.email, values.password);
-        console.log(user);
-        dispatch(updateNotifyStatus('succeed'));
-        navigate('/login');
+        await createUserWithEmailAndPassword(auth, values.email, values.password);
+        navigate('/home');
       } catch (error) {
         resetForm();
-        dispatch(updateNotifyStatus('failure'));
+        isShowNotify(true);
       }
     },
   });
 
-  return (
-    <Helmet title="Signup">
-      <div className="content">
-        <CommonSection title="Signup" />
+  useEffect(() => {
+    setTimeout(() => isShowNotify(false), 2000);
 
-        <section>
-          <Container>
-            <Row>
-              <Col lg="6" md="6" sm="12" className="m-auto text-center">
-                <form className="form mb-5" onSubmit={formik.handleSubmit}>
-                  <div className="form__group">
-                    <input
-                      type="text"
-                      placeholder="Full Name"
-                      id="fullName"
-                      name="fullName"
-                      value={formik.values.fullName}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.errors.fullName && <p>{formik.errors.fullName}</p>}
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="email"
-                      placeholder="Email"
-                      id="email"
-                      name="email"
-                      value={formik.values.email}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.errors.email && <p>{formik.errors.email}</p>}
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="password"
-                      placeholder="Password"
-                      id="password"
-                      name="password"
-                      value={formik.values.password}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.errors.password && <p>{formik.errors.password}</p>}
-                  </div>
-                  <div className="form__group">
-                    <input
-                      type="password"
-                      placeholder="Confirmed Password"
-                      id="confirmedPassword"
-                      name="confirmedPassword"
-                      value={formik.values.confirmedPassword}
-                      onChange={formik.handleChange}
-                    />
-                    {formik.errors.confirmedPassword && <p>{formik.errors.confirmedPassword}</p>}
-                  </div>
-                  <button type="submit" className="addTOCart__btn">
-                    Sign Up
-                  </button>
-                </form>
-                <Link to="/login">Already have an account? Login</Link>
-              </Col>
-            </Row>
-          </Container>
-        </section>
-      </div>
-    </Helmet>
+    return () => {
+      clearTimeout();
+    };
+  }, [showNotify]);
+
+  return (
+    <>
+      {showNotify && <NotifyMessage content={'signed up'} status={'failure'} />}
+
+      <Helmet title="Sign Up">
+        <div className="content">
+          <CommonSection title="Sign Up" />
+
+          <section>
+            <Container>
+              <Row>
+                <Col lg="6" md="6" sm="12" className="m-auto text-center">
+                  <form className="form mb-5" onSubmit={formik.handleSubmit}>
+                    <div className="form__group">
+                      <input
+                        type="email"
+                        placeholder="Email"
+                        id="email"
+                        name="email"
+                        value={formik.values.email}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.errors.email && <p>{formik.errors.email}</p>}
+                    </div>
+                    <div className="form__group">
+                      <input
+                        type="password"
+                        placeholder="Password"
+                        id="password"
+                        name="password"
+                        value={formik.values.password}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.errors.password && <p>{formik.errors.password}</p>}
+                    </div>
+                    <div className="form__group">
+                      <input
+                        type="password"
+                        placeholder="Confirmed Password"
+                        id="confirmedPassword"
+                        name="confirmedPassword"
+                        value={formik.values.confirmedPassword}
+                        onChange={formik.handleChange}
+                      />
+                      {formik.errors.confirmedPassword && <p>{formik.errors.confirmedPassword}</p>}
+                    </div>
+                    <button type="submit" className="addToCart__btn">
+                      Sign Up
+                    </button>
+                  </form>
+                  <Link to="/login">Already have an account? Login</Link>
+                </Col>
+              </Row>
+            </Container>
+          </section>
+        </div>
+      </Helmet>
+    </>
   );
 };
 

@@ -1,35 +1,35 @@
-import React, { useState } from "react";
-import Helmet from "../components/Helmet/Helmet";
-import CommonSection from "../components/UI/common-section/CommonSection";
+import React, { useState } from 'react';
+import Helmet from '../components/Helmet/Helmet';
+import CommonSection from '../components/UI/common-section/CommonSection';
 
-import { Container, Row, Col } from "reactstrap";
+import { Container, Row, Col } from 'reactstrap';
 
-import products from "../assets/fake-data/products";
-import ProductCard from "../components/UI/product-card/ProductCard";
-import ReactPaginate from "react-paginate";
+import products from '../assets/fake-data/products';
+import ProductCard from '../components/UI/product-card/ProductCard';
+import ReactPaginate from 'react-paginate';
 
-import "../styles/all-foods.css";
-import "../styles/pagination.css";
+import '../styles/all-foods.css';
+import '../styles/pagination.css';
 
 const AllFoods = () => {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [sortValue, setSortValue] = useState("");
+  const [searchTerm, setSearchTerm] = useState('');
+  const [sortValue, setSortValue] = useState('');
 
   const [pageNumber, setPageNumber] = useState(0);
 
   const searchedProduct = products.filter((item) => {
-    if (searchTerm.valueOf === "") {
+    if (searchTerm.valueOf === '') {
       return item;
     }
     if (item.title.toLowerCase().includes(searchTerm.toLowerCase())) {
       return item;
     } else {
-      return console.log("not found");
+      return console.log('not found');
     }
   });
 
   const sortedProduct = searchedProduct.sort((itemA, itemB) => {
-    if (sortValue === "ascending") {
+    if (sortValue === 'ascending') {
       const titleA = itemA.title.toUpperCase();
       const titleB = itemB.title.toUpperCase();
 
@@ -42,7 +42,7 @@ const AllFoods = () => {
       return 0;
     }
 
-    if (sortValue === "descending") {
+    if (sortValue === 'descending') {
       const titleA = itemA.title.toUpperCase();
       const titleB = itemB.title.toUpperCase();
 
@@ -55,14 +55,14 @@ const AllFoods = () => {
       return 0;
     }
 
-    if (sortValue === "low-price") {
+    if (sortValue === 'low-price') {
       return (
         (itemA.price * (1 - Number(itemA.salePercent / 100))).toFixed(1) -
         (itemB.price * (1 - Number(itemB.salePercent / 100))).toFixed(1)
       );
     }
 
-    if (sortValue === "high-price") {
+    if (sortValue === 'high-price') {
       return (
         (itemB.price * (1 - Number(itemB.salePercent / 100))).toFixed(1) -
         (itemA.price * (1 - Number(itemA.salePercent / 100))).toFixed(1)
@@ -76,10 +76,7 @@ const AllFoods = () => {
 
   const productPerPage = 12;
   const visitedPage = pageNumber * productPerPage;
-  const displayPage = sortedProduct.slice(
-    visitedPage,
-    visitedPage + productPerPage
-  );
+  const displayPage = sortedProduct.slice(visitedPage, visitedPage + productPerPage);
 
   const pageCount = Math.ceil(searchedProduct.length / productPerPage);
 
@@ -103,7 +100,7 @@ const AllFoods = () => {
                     onChange={(e) => setSearchTerm(e.target.value)}
                   />
                   <span>
-                    <i class="ri-search-line"></i>
+                    <i className="ri-search-line"></i>
                   </span>
                 </div>
               </Col>
@@ -121,14 +118,7 @@ const AllFoods = () => {
 
               {displayPage.length > 0 ? (
                 displayPage.map((item) => (
-                  <Col
-                    lg="3"
-                    md="4"
-                    sm="6"
-                    xs="12"
-                    key={item.id}
-                    className="mb-4"
-                  >
+                  <Col lg="3" md="4" sm="6" xs="12" key={item.id} className="mb-4">
                     <ProductCard item={item} />
                   </Col>
                 ))
@@ -140,8 +130,8 @@ const AllFoods = () => {
                 <ReactPaginate
                   pageCount={pageCount}
                   onPageChange={changePage}
-                  previousLabel={"Prev"}
-                  nextLabel={"Next"}
+                  previousLabel={'Prev'}
+                  nextLabel={'Next'}
                   containerClassName=" paginationBttns "
                 />
               </div>

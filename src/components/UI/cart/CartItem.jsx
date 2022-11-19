@@ -1,14 +1,10 @@
-import React from "react";
-import { ListGroupItem } from "reactstrap";
+import React from 'react';
+import { ListGroupItem } from 'reactstrap';
 
-import "../../../styles/cart-item.css";
+import '../../../styles/cart-item.css';
 
-import { useDispatch } from "react-redux";
-import {
-  addItem,
-  removeItem,
-  deleteItem,
-} from "../../../store/shopping-cart/cartSlice";
+import { useDispatch } from 'react-redux';
+import { addItem, removeItem, deleteItem } from '../../../store/shopping-cart/cartSlice';
 
 const CartItem = ({ item }) => {
   const { id, title, price, image01, quantity, totalPrice } = item;
@@ -47,17 +43,17 @@ const CartItem = ({ item }) => {
             </p>
             <div className=" d-flex align-items-center justify-content-between increase__decrease-btn">
               <span className="increase__btn" onClick={incrementItem}>
-                <i class="ri-add-line"></i>
+                <i className="ri-add-line"></i>
               </span>
               <span className="quantity">{quantity}</span>
               <span className="decrease__btn" onClick={decreaseItem}>
-                <i class="ri-subtract-line"></i>
+                <i className="ri-subtract-line"></i>
               </span>
             </div>
           </div>
 
           <span className="delete__btn" onClick={delItem}>
-            <i class="ri-close-line"></i>
+            <i className="ri-close-line"></i>
           </span>
         </div>
       </div>

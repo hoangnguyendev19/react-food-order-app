@@ -90,6 +90,22 @@
   display: flex;
   align-items: center;
   justify-content: center;
+  margin-left: 20px;
+}
+
+.user img {
+  width: 100%;
+  object-fit: cover;
+  border-radius: 10px;
+  overflow: auto;
+}
+
+.user .dropdown-toggle {
+  width: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
 }
 
 .user__sign-in {

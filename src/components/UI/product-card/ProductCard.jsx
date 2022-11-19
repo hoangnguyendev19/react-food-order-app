@@ -1,25 +1,29 @@
-import React from "react";
-
-import "../../../styles/product-card.css";
-
-import { Link } from "react-router-dom";
-
-import { useDispatch } from "react-redux";
-import { addItem } from "../../../store/shopping-cart/cartSlice";
+import React from 'react';
+import '../../../styles/product-card.css';
+import { Link, useNavigate } from 'react-router-dom';
+import { useDispatch } from 'react-redux';
+import { addItem } from '../../../store/shopping-cart/cartSlice';
+import { auth } from '../../../firebase/firebase-config';
 
 const ProductCard = (props) => {
   const { id, title, image01, price, sale, salePercent } = props.item;
+  const user = auth.currentUser;
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const addToCart = () => {
-    dispatch(
-      addItem({
-        id,
-        title,
-        image01,
-        price,
-      })
-    );
+    if (user) {
+      dispatch(
+        addItem({
+          id,
+          title,
+          image01,
+          price,
+        })
+      );
+    } else {
+      navigate('/login');
+    }
   };
 
   return (
@@ -46,7 +50,7 @@ const ProductCard = (props) => {
           ) : (
             <span className="product__price">${price}</span>
           )}
-          <button className="addTOCart__btn" onClick={addToCart}>
+          <button className="addToCart__btn" onClick={addToCart}>
             Add To Cart
           </button>
         </div>

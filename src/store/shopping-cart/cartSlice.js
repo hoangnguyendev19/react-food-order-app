@@ -1,24 +1,22 @@
-import { createSlice } from "@reduxjs/toolkit";
+import { createSlice } from '@reduxjs/toolkit';
 
 const items =
-  localStorage.getItem("cartItems") !== null
-    ? JSON.parse(localStorage.getItem("cartItems"))
-    : [];
+  localStorage.getItem('cartItems') !== null ? JSON.parse(localStorage.getItem('cartItems')) : [];
 
 const totalAmount =
-  localStorage.getItem("totalAmount") !== null
-    ? JSON.parse(localStorage.getItem("totalAmount"))
+  localStorage.getItem('totalAmount') !== null
+    ? JSON.parse(localStorage.getItem('totalAmount'))
     : 0;
 
 const totalQuantity =
-  localStorage.getItem("totalQuantity") !== null
-    ? JSON.parse(localStorage.getItem("totalQuantity"))
+  localStorage.getItem('totalQuantity') !== null
+    ? JSON.parse(localStorage.getItem('totalQuantity'))
     : 0;
 
-const setItemFunc = (item, totalAmount, totalQuantity) => {
-  localStorage.setItem("cartItems", JSON.stringify(item));
-  localStorage.setItem("totalAmount", JSON.stringify(totalAmount));
-  localStorage.setItem("totalQuantity", JSON.stringify(totalQuantity));
+const setItem = (item, totalAmount, totalQuantity) => {
+  localStorage.setItem('cartItems', JSON.stringify(item));
+  localStorage.setItem('totalAmount', JSON.stringify(totalAmount));
+  localStorage.setItem('totalQuantity', JSON.stringify(totalQuantity));
 };
 
 const initialState = {
@@ -28,21 +26,16 @@ const initialState = {
 };
 
 const cartSlice = createSlice({
-  name: "cart",
+  name: 'cart',
   initialState,
 
   reducers: {
-    // =========== add item ============
     addItem(state, action) {
       const newItem = action.payload;
-      const existingItem = state.cartItems.find(
-        (item) => item.id === newItem.id
-      );
+      const existingItem = state.cartItems.find((item) => item.id === newItem.id);
       state.totalQuantity++;
 
       if (!existingItem) {
-        // ===== note: if you use just redux you should not mute state array instead of clone the state array, but if you use redux toolkit that will not a problem because redux toolkit clone the array behind the scene
-
         state.cartItems.push({
           id: newItem.id,
           title: newItem.title,
@@ -53,24 +46,20 @@ const cartSlice = createSlice({
         });
       } else {
         existingItem.quantity++;
-        existingItem.totalPrice =
-          Number(existingItem.totalPrice) + Number(newItem.price);
+        existingItem.totalPrice = Number(existingItem.totalPrice) + Number(newItem.price);
       }
 
       state.totalAmount = state.cartItems.reduce(
         (total, item) => total + Number(item.price) * Number(item.quantity),
-
         0
       );
 
-      setItemFunc(
+      setItem(
         state.cartItems.map((item) => item),
         state.totalAmount,
         state.totalQuantity
       );
     },
-
-    // ========= remove item ========
 
     removeItem(state, action) {
       const id = action.payload;
@@ -81,8 +70,7 @@ const cartSlice = createSlice({
         state.cartItems = state.cartItems.filter((item) => item.id !== id);
       } else {
         existingItem.quantity--;
-        existingItem.totalPrice =
-          Number(existingItem.totalPrice) - Number(existingItem.price);
+        existingItem.totalPrice = Number(existingItem.totalPrice) - Number(existingItem.price);
       }
 
       state.totalAmount = state.cartItems.reduce(
@@ -90,14 +78,12 @@ const cartSlice = createSlice({
         0
       );
 
-      setItemFunc(
+      setItem(
         state.cartItems.map((item) => item),
         state.totalAmount,
         state.totalQuantity
       );
     },
-
-    //============ delete item ===========
 
     deleteItem(state, action) {
       const id = action.payload;
@@ -112,14 +98,24 @@ const cartSlice = createSlice({
         (total, item) => total + Number(item.price) * Number(item.quantity),
         0
       );
-      setItemFunc(
+      setItem(
         state.cartItems.map((item) => item),
         state.totalAmount,
         state.totalQuantity
       );
     },
+
+    resetCart(state) {
+      state = {
+        cartItems: [],
+        totalAmount: 0,
+        totalQuantity: 0,
+      };
+
+      setItem([], 0, 0);
+    },
   },
 });
 
-export const { addItem, removeItem, deleteItem } = cartSlice.actions;
+export const { addItem, removeItem, deleteItem, resetCart } = cartSlice.actions;
 export default cartSlice.reducer;

@@ -1,23 +1,23 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect } from 'react';
 
-import products from "../assets/fake-data/products";
-import { useParams } from "react-router-dom";
-import Helmet from "../components/Helmet/Helmet";
-import CommonSection from "../components/UI/common-section/CommonSection";
-import { Container, Row, Col } from "reactstrap";
+import products from '../assets/fake-data/products';
+import { useParams } from 'react-router-dom';
+import Helmet from '../components/Helmet/Helmet';
+import CommonSection from '../components/UI/common-section/CommonSection';
+import { Container, Row, Col } from 'reactstrap';
 
-import { useDispatch, useSelector } from "react-redux";
-import { addItem } from "../store/shopping-cart/cartSlice";
+import { useDispatch, useSelector } from 'react-redux';
+import { addItem } from '../store/shopping-cart/cartSlice';
 
-import "../styles/product-details.css";
+import '../styles/product-details.css';
 
-import ProductCard from "../components/UI/product-card/ProductCard";
-import { useFormik } from "formik";
-import * as yup from "yup";
-import { post } from "../store/review-comments/commentSlice";
+import ProductCard from '../components/UI/product-card/ProductCard';
+import { useFormik } from 'formik';
+import * as yup from 'yup';
+import { post } from '../store/review-comments/commentSlice';
 
 const FoodDetails = () => {
-  const [tab, setTab] = useState("desc");
+  const [tab, setTab] = useState('desc');
   const { id } = useParams();
   const dispatch = useDispatch();
   const commentList = useSelector((state) => state.comment.commentList);
@@ -42,27 +42,24 @@ const FoodDetails = () => {
   const schema = yup.object().shape({
     fullName: yup
       .string()
-      .required("Please enter your full name!")
-      .min(4, "Please enter your full name at least four characters!")
-      .max(30, "Too long!"),
+      .required('Please enter your full name!')
+      .min(4, 'Please enter your full name at least four characters!')
+      .max(30, 'Too long!'),
     email: yup
       .string()
-      .required("Please enter your email!")
-      .matches(
-        /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/,
-        "Please enter your email a valid!"
-      ),
+      .required('Please enter your email!')
+      .matches(/^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/, 'Please enter your email a valid!'),
     reviewText: yup
       .string()
-      .required("Please write your reviews!")
-      .min(10, "Please write your reviews at least ten characters!"),
+      .required('Please write your reviews!')
+      .min(10, 'Please write your reviews at least ten characters!'),
   });
 
   const formik = useFormik({
     initialValues: {
-      fullName: "",
-      email: "",
-      reviewText: "",
+      fullName: '',
+      email: '',
+      reviewText: '',
     },
     validationSchema: schema,
     onSubmit: (values, { resetForm }) => {
@@ -89,23 +86,14 @@ const FoodDetails = () => {
             <Row>
               <Col lg="2" md="2">
                 <div className="product__images ">
-                  <div
-                    className="img__item mb-3"
-                    onClick={() => setPreviewImg(product.image01)}
-                  >
+                  <div className="img__item mb-3" onClick={() => setPreviewImg(product.image01)}>
                     <img src={product.image01} alt="" className="w-50" />
                   </div>
-                  <div
-                    className="img__item mb-3"
-                    onClick={() => setPreviewImg(product.image02)}
-                  >
+                  <div className="img__item mb-3" onClick={() => setPreviewImg(product.image02)}>
                     <img src={product.image02} alt="" className="w-50" />
                   </div>
 
-                  <div
-                    className="img__item"
-                    onClick={() => setPreviewImg(product.image03)}
-                  >
+                  <div className="img__item" onClick={() => setPreviewImg(product.image03)}>
                     <img src={product.image03} alt="" className="w-50" />
                   </div>
                 </div>
@@ -126,7 +114,7 @@ const FoodDetails = () => {
                   <p className="category mb-5">
                     Category: <span>{category}</span>
                   </p>
-                  <button onClick={increaseItem} className="addTOCart__btn">
+                  <button onClick={increaseItem} className="addToCart__btn">
                     Add to Cart
                   </button>
                 </div>
@@ -135,20 +123,20 @@ const FoodDetails = () => {
               <Col lg="12">
                 <div className="tabs d-flex align-items-center gap-5 py-3">
                   <h6
-                    className={` ${tab === "desc" ? "tab__active" : ""}`}
-                    onClick={() => setTab("desc")}
+                    className={` ${tab === 'desc' ? 'tab__active' : ''}`}
+                    onClick={() => setTab('desc')}
                   >
                     Description
                   </h6>
                   <h6
-                    className={` ${tab === "rev" ? "tab__active" : ""}`}
-                    onClick={() => setTab("rev")}
+                    className={` ${tab === 'rev' ? 'tab__active' : ''}`}
+                    onClick={() => setTab('rev')}
                   >
                     Review
                   </h6>
                 </div>
 
-                {tab === "desc" ? (
+                {tab === 'desc' ? (
                   <div className="tab__content">
                     <p>{desc}</p>
                   </div>
@@ -176,9 +164,7 @@ const FoodDetails = () => {
                           value={formik.values.fullName}
                           onChange={formik.handleChange}
                         />
-                        {formik.errors.fullName && (
-                          <p>{formik.errors.fullName}</p>
-                        )}
+                        {formik.errors.fullName && <p>{formik.errors.fullName}</p>}
                       </div>
                       <div className="form__group">
                         <input
@@ -202,12 +188,10 @@ const FoodDetails = () => {
                           value={formik.values.reviewText}
                           onChange={formik.handleChange}
                         />
-                        {formik.errors.reviewText && (
-                          <p>{formik.errors.reviewText}</p>
-                        )}
+                        {formik.errors.reviewText && <p>{formik.errors.reviewText}</p>}
                       </div>
 
-                      <button type="submit" className="addTOCart__btn">
+                      <button type="submit" className="addToCart__btn">
                         Submit
                       </button>
                     </form>
