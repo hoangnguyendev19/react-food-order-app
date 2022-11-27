@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 
 import products from '../assets/fake-data/products';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import Helmet from '../components/Helmet/Helmet';
 import CommonSection from '../components/UI/common-section/CommonSection';
 import { Container, Row, Col } from 'reactstrap';
@@ -15,11 +15,14 @@ import ProductCard from '../components/UI/product-card/ProductCard';
 import { useFormik } from 'formik';
 import * as yup from 'yup';
 import { post } from '../store/review-comments/commentSlice';
+import { auth } from '../firebase/firebase-config';
 
 const FoodDetails = () => {
   const [tab, setTab] = useState('desc');
   const { id } = useParams();
   const dispatch = useDispatch();
+  const user = auth.currentUser;
+  const navigate = useNavigate();
   const commentList = useSelector((state) => state.comment.commentList);
 
   const product = products.find((product) => product.id === id);
@@ -29,14 +32,18 @@ const FoodDetails = () => {
   const relatedProduct = products.filter((item) => category === item.category);
 
   const increaseItem = () => {
-    dispatch(
-      addItem({
-        id,
-        title,
-        price,
-        image01,
-      })
-    );
+    if (user) {
+      dispatch(
+        addItem({
+          id,
+          title,
+          price,
+          image01,
+        })
+      );
+    } else {
+      navigate('/login');
+    }
   };
 
   const schema = yup.object().shape({
