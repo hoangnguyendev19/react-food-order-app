@@ -6,22 +6,20 @@
 
 ##### Here's features included in this project
 
-- Add to cart functionality
-- Shopping cart functionality
-- Product Filtering functionality
-- Product Sorting functionality
-- Product page
-- Cart and checkout page
-- Contact page
-- Login and Register page
-- Awesome modern minimalist UI
+- Adding, removing to cart.
+- Increasing/Descreasing quantity products.
+- Sorting products by price, A->Z/Z->A name.
+- Filtering products by name.
+- Payment
+- Sign-in/sign-out and sign-up by email, password.
+- Updating profile includes full-name, email, image, password.
 
 ### Technologies Used:
 
 ---
 
-1. React.js
-2. Redux Toolkit
-3. ReactStrap
-4. CSS
-
+1. HTML/CSS/Responsive/JS
+2. React.js
+3. Redux Toolkit
+4. ReactStrap
+5. Firebase/Auth
